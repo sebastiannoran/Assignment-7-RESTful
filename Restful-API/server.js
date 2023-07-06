@@ -69,8 +69,18 @@ app.post("/tasks", (req, res) => {
     res.send(newTask);
 });
 
-app.put("/tasks", (req, res) => {
-    // put method, replace task
+app.put("/tasks/:id", (req, res) => { // do something similar to patch method
+    const taskId = parseInt(req.params.id, 10);
+    const updateTask = req.body;
+    const taskIndex = tasks.findIndex(task => task.id === taskId);
+
+    if (taskIndex === -1) {
+        return res.status(404).send ({message: "Task not found"})
+    } else {
+        tasks[taskIndex] = { ...tasks[taskIndex], ...updateTask };
+        res.send(tasks[tasks[taskIndex]]);
+    }
+
 });
 
 app.delete("/tasks/:id", (req, res) => {
