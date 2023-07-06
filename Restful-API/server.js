@@ -25,15 +25,18 @@ const port = 4000;
 const tasks = [
     {
         id: 1,
-        title: "Finish Assignemnt 6"
+        title: "Finish Assignemnt 6",
+        status: false
     },
     {
         id: 2,
-        title: "Run 4 miles"
+        title: "Run 4 miles",
+        status: false
     },
     {
         id: 3,
-        title: "Climb a V3"
+        title: "Climb a V3",
+        status: true
     }
 ]
 
@@ -41,7 +44,41 @@ app.get("/", (req, res) => {
     res.send({tasks});
 })
 
+app.get("/tasks/:id", (req, res) => {
+    const taskId = parseInt(req.params.id, 10); // make the id value into workable integer
+    const task = tasks.find((task) => task.id === taskId); // check if task is same as task.id
+    res.send(task);
+})
 
+
+app.get("/tasks/:status", (req, res) => {
+    // get task by completion status
+});
+
+app.use((req, res, next) => {
+    console.log(`Request: ${req.method} ${req.originalUrl}`);
+    next();
+  });
+
+app.use(express.json())
+
+app.post("/tasks", (req, res) => {
+    const newTask = req.body;
+    console.log("newTask", newTask);
+    tasks.push(newTask);
+    res.send(newTask);
+});
+
+app.put("/tasks", (req, res) => {
+    // put method, replace task
+});
+
+app.delete("/tasks/:id", (req, res) => {
+    const taskId = parseInt(req.params.id, 10);
+    const taskIndex = tasks.findIndex(task => task.id === taskId);
+    tasks.splice(taskIndex, 1);
+    res.send({message: "task deleted succesfully"});
+});
 
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
