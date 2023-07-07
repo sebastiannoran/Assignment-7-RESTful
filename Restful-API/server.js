@@ -51,10 +51,6 @@ app.get("/tasks/:id", (req, res) => {
 })
 
 
-app.get("/tasks/:status", (req, res) => {
-    // get task by completion status
-});
-
 app.use((req, res, next) => {
     console.log(`Request: ${req.method} ${req.originalUrl}`);
     next();
@@ -78,7 +74,7 @@ app.put("/tasks/:id", (req, res) => { // do something similar to patch method
         return res.status(404).send ({message: "Task not found"})
     } else {
         tasks[taskIndex] = { ...tasks[taskIndex], ...updateTask };
-        res.send(tasks[tasks[taskIndex]]);
+        res.send(tasks[tasks[taskIndex]])
     }
 
 });
@@ -88,6 +84,10 @@ app.delete("/tasks/:id", (req, res) => {
     const taskIndex = tasks.findIndex(task => task.id === taskId);
     tasks.splice(taskIndex, 1);
     res.send({message: "task deleted succesfully"});
+});
+
+app.use((req, res, next) => {
+    res.status(404).send({ message: "Invalid route" });
 });
 
 app.listen(port, () => {
